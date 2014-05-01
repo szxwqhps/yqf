@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html>
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Test Yqf</title>
+    <link rel="stylesheet" href="http://yui.yahooapis.com/pure/0.3.0/pure-min.css">
+</head>
+<body class="yui3-skin-sam">
+<div>
+    <button class="pure-button" id="start">Start</button>
+    <button class="pure-button" id="stop">Stop</button>
+</div>
+
+<div>
+    <button class="pure-button" id="sigA">A</button>
+    <button class="pure-button" id="sigB">B</button>
+    <button class="pure-button" id="sigC">C</button>
+    <button class="pure-button" id="sigD">D</button>
+    <button class="pure-button" id="sigE">E</button>
+    <button class="pure-button" id="sigF">F</button>
+    <button class="pure-button" id="sigG">G</button>
+    <button class="pure-button" id="sigH">H</button>
+</div>
+<div id="ytmlog"></div>
+<script src="http://yui.yahooapis.com/3.9.1/build/yui/yui-min.js"></script>
+<script>
+    YUI({
+        modules: {
+            yqf: {
+                fullpath: 'yqf.js',
+                requires:['base']
+            },
+            ytm: {
+                fullpath: 'ytm.js',
+                requires: [ 'base', 'yqf' ]
+            }
+        }
+    }).use('node', 'event', 'console', 'ytm', 'yqf', function(Y) {
+        var machine = null,
+                QF = Y.yqf.QF,
+                QEvent = Y.yqf.QEvent,
+                startButton =  Y.one('#start'),
+                stopButton = Y.one('#stop'),
+                stop = true;
+
+        new Y.Console().render('#ytmlog');
+
+        QF.init(50);
+
+        startButton.set('disabled', false);
+        stopButton.set('disabled', true);
+        startButton.on('click', function() {
+            if (stop) {
+                machine = new Y.ytm.TestMachine();
+                QF.startActive(machine, 1);
+                QF.run();
+                stop = false;
+                startButton.set('disabled', true);
+                stopButton.set('disabled', false);
+            }
+        });
+
+        stopButton.on('click', function() {
+            if (!stop) {
+                machine.postFifo(new QEvent('tm:terminate', null, null));
+                stop = true;
+                startButton.set('disabled', false);
+                stopButton.set('disabled', true);
+            }
+        });
+
+        Y.on('click', function() {
+            Y.log('Send event a');
+            machine.postFifo(new QEvent('tm:a'));
+        }, '#sigA');
+
+        Y.on('click', function() {
+            Y.log('Send event b');
+            machine.postFifo(new QEvent('tm:b'));
+        }, '#sigB');
+
+        Y.on('click', function() {
+            Y.log('Send event c');
+            machine.postFifo(new QEvent('tm:c'));
+        }, '#sigC');
+
+        Y.on('click', function() {
+            Y.log('Send event d');
+            machine.postFifo(new QEvent('tm:d'));
+        }, '#sigD');
+
+        Y.on('click', function() {
+            Y.log('Send event e');
+            machine.postFifo(new QEvent('tm:e'));
+        }, '#sigE');
+
+        Y.on('click', function() {
+            Y.log('Send event f');
+            machine.postFifo(new QEvent('tm:f'));
+        }, '#sigF');
+
+        Y.on('click', function() {
+            Y.log('Send event g');
+            machine.postFifo(new QEvent('tm:g'));
+        }, '#sigG');
+
+        Y.on('click', function() {
+            Y.log('Send event h');
+            machine.postFifo(new QEvent('tm:h'));
+        }, '#sigH');
+    });
+</script>
+</body>
+</html>
