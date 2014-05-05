@@ -254,12 +254,27 @@ YUI.add('yqf', function(Y) {
         var eventQueue = [],
             deferQueue = [];
 
+        this.run = function() {
+            var e = this.getEvent();
+
+            if (e != null) {
+                this.dispatch(e);
+            }
+        };
+
+        this.schedule = function() {
+            setTimeout(function() {
+                this.run();
+            }.bind(this), 0);
+        };
         this.postFifo = function(e) {
             eventQueue.push(e);
+            this.schedule();
         };
 
         this.postLifo = function(e) {
             eventQueue.unshift(e);
+            this.schedule();
         };
 
         this.getEvent = function() {
@@ -284,6 +299,7 @@ YUI.add('yqf', function(Y) {
             for (i = 0; i < length; i++) {
                 e = deferQueue.shift();
                 eventQueue.push(e);
+                this.schedule();
             }
 
             return length > 0;
@@ -450,7 +466,8 @@ YUI.add('yqf', function(Y) {
                 }
             }
 
-            QF.schedule();
+            // Use setTimeout shcedule running, this call is not needed.
+            //QF.schedule();
         },
 
         schedule: function() {
