@@ -1,5 +1,11 @@
 /**
- * Created by xiawanqiang on 14-5-1.
+ * Copyright (c) 2014, Wanqiang Xia. All rights reserved.
+ *
+ * This program is open source software: you can redistribute it and/or
+ * modify it under the terms of the BSD 2-Clause license.
+ *
+ * This program is a javascript implementation of QP framework as a YUI module.
+ * You can visit QP website (http://www.state-machine.com) for more information
  */
 
 /**
@@ -267,6 +273,7 @@ YUI.add('yqf', function(Y) {
                 this.run();
             }.bind(this), 0);
         };
+
         this.postFifo = function(e) {
             eventQueue.push(e);
             this.schedule();
@@ -463,25 +470,6 @@ YUI.add('yqf', function(Y) {
                     } else {
                         QF.timeEvents.splice(i, 1);	// remove
                     }
-                }
-            }
-
-            // Use setTimeout shcedule running, this call is not needed.
-            //QF.schedule();
-        },
-
-        schedule: function() {
-            var i = 0,
-                e = null,
-                ao = null,
-                length = QF.activeObjects.length;
-
-            for (i = length - 1; i >= 0; i--) {
-                ao = QF.activeObjects[i];
-                e = ao.getEvent();
-                while (e !== null) {
-                    ao.dispatch(e);
-                    e = ao.getEvent();
                 }
             }
         },
